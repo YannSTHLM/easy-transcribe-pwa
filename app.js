@@ -57,6 +57,10 @@ class EasyTranscribePWA {
         this.navButtons = document.querySelectorAll('.nav-btn');
         this.views = document.querySelectorAll('.view');
         
+        // Debug: Log element counts
+        console.log('Navigation buttons found:', this.navButtons.length);
+        console.log('Views found:', this.views.length);
+        
         // Configuration elements
         this.apiKeyInput = document.getElementById('apiKeyInput');
         this.toggleApiKeyBtn = document.getElementById('toggleApiKey');
@@ -81,6 +85,11 @@ class EasyTranscribePWA {
         // Action buttons
         this.transcribeBtn = document.getElementById('transcribeBtn');
         this.validateBtn = document.getElementById('validateBtn');
+        
+        // Debug: Check if key buttons exist
+        console.log('Transcribe button found:', !!this.transcribeBtn);
+        console.log('Validate button found:', !!this.validateBtn);
+        console.log('Upload area found:', !!this.uploadArea);
 
         // Results elements
         this.resultsSection = document.getElementById('resultsSection');
