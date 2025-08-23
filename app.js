@@ -54,8 +54,8 @@ class EasyTranscribePWA {
 
     initializeElements() {
         // Navigation elements
-        this.navButtons = document.querySelectorAll('.nav-btn');
-        this.views = document.querySelectorAll('.view');
+        this.navButtons = document.querySelectorAll('.nav-tab');
+        this.views = document.querySelectorAll('.tab-content');
         
         // Debug: Log element counts
         console.log('Navigation buttons found:', this.navButtons.length);
@@ -122,7 +122,8 @@ class EasyTranscribePWA {
         // Navigation events
         this.navButtons?.forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const view = e.target.dataset.view;
+                const view = e.target.dataset.tab || e.target.closest('.nav-tab')?.dataset.tab;
+                console.log('Tab clicked:', view);
                 this.switchView(view);
             });
         });
@@ -188,12 +189,12 @@ class EasyTranscribePWA {
         
         // Update navigation
         this.navButtons?.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.view === viewName);
+            btn.classList.toggle('active', btn.dataset.tab === viewName);
         });
         
         // Update views
         this.views?.forEach(view => {
-            view.classList.toggle('active', view.id === `${viewName}View`);
+            view.classList.toggle('active', view.id === `${viewName}Tab`);
         });
         
         // Load view-specific data
