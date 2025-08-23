@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Easy Transcribe PWA</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .test-result { padding: 10px; margin: 5px 0; border-radius: 3px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { padding: 8px 16px; margin: 5px; cursor: pointer; }
+        input[type="file"] { margin: 10px 0; }
+        input[type="text"] { width: 300px; padding: 5px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Easy Transcribe PWA - Debug Page</h1>
+    
+    <div class="test-section">
+        <h3>📁 File Upload Test</h3>
+        <input type="file" id="testFileInput" accept="audio/*">
+        <button onclick="testFileUpload()">Test File Selection</button>
+        <div id="fileTestResult" class="test-result info">Select a file and click test...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔑 API Key Validation Test</h3>
+        <input type="text" id="testApiKey" placeholder="Enter your Groq API key">
+        <button onclick="testApiKey()">Test API Key</button>
+        <div id="apiTestResult" class="test-result info">Enter API key and click test...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔍 Element Detection Test</h3>
+        <button onclick="testElements()">Check Required Elements</button>
+        <div id="elementTestResult" class="test-result info">Click to test element detection...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>📱 App Integration Test</h3>
+        <button onclick="testAppIntegration()">Test App Instance</button>
+        <div id="appTestResult" class="test-result info">Click to test app integration...</div>
+    </div>
+    
+    <p><a href="index.html">← Back to Main App</a></p>
+
+    <script>
+        function testFileUpload() {
+            const fileInput = document.getElementById('testFileInput');
+            const result = document.getElementById('fileTestResult');
+            
+            if (fileInput.files.length === 0) {
+                result.className = 'test-result error';
+                result.textContent = '❌ No file selected';
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const validTypes = [
+                'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/wave',
+                'audio/x-wav', 'audio/aac', 'audio/ogg', 'audio/webm',
+                'audio/flac', 'audio/x-flac', 'audio/mp4', 'audio/m4a'
+            ];
+            
+            const isValid = validTypes.includes(file.type) || hasValidAudioExtension(file.name);
+            const sizeOk = file.size <= (25 * 1024 * 1024); // 25MB
+            
+            if (isValid && sizeOk) {
+                result.className = 'test-result success';
+                result.innerHTML = `✅ File valid!<br>Name: ${file.name}<br>Type: ${file.type}<br>Size: ${formatFileSize(file.size)}`;
+            } else {
+                result.className = 'test-result error';
+                result.innerHTML = `❌ File invalid!<br>Valid type: ${isValid}<br>Size OK: ${sizeOk}<br>Type: ${file.type}<br>Size: ${formatFileSize(file.size)}`;
+            }
+        }
+        
+        function hasValidAudioExtension(filename) {
+            const validExtensions = ['.mp3', '.wav', '.m4a', '.aac', '.ogg', '.flac'];
+            return validExtensions.some(ext => filename.toLowerCase().endsWith(ext));
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        async function testApiKey() {
+            const apiKeyInput = document.getElementById('testApiKey');
+            const result = document.getElementById('apiTestResult');
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                result.className = 'test-result error';
+                result.textContent = '❌ API key is required';
+                return;
+            }
+            
+            if (apiKey.length < 10) {
+                result.className = 'test-result error';
+                result.textContent = '❌ API key seems too short';
+                return;
+            }
+            
+            result.className = 'test-result info';
+            result.textContent = '⏳ Validating API key...';
+            
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/models', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result.className = 'test-result success';
+                    result.innerHTML = `✅ API key valid!<br>Available models: ${data.data ? data.data.length : 'Unknown'}`;
+                } else {
+                    result.className = 'test-result error';
+                    result.innerHTML = `❌ API key invalid!<br>Status: ${response.status}<br>Message: ${response.statusText}`;
+                }
+            } catch (error) {
+                result.className = 'test-result error';
+                result.innerHTML = `❌ Network error!<br>Error: ${error.message}`;
+            }
+        }
+        
+        function testElements() {
+            const result = document.getElementById('elementTestResult');
+            const requiredElements = [
+                'uploadArea', 'audioFileInput', 'browseBtn', 'fileInfo', 'fileName', 
+                'fileSize', 'removeFile', 'apiKeyInput', 'validateBtn', 'transcribeBtn'
+            ];
+            
+            let found = [];
+            let missing = [];
+            
+            requiredElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    found.push(id);
+                } else {
+                    missing.push(id);
+                }
+            });
+            
+            if (missing.length === 0) {
+                result.className = 'test-result success';
+                result.innerHTML = `✅ All elements found!<br>Found: ${found.length}`;
+            } else {
+                result.className = 'test-result error';
+                result.innerHTML = `❌ Missing elements!<br>Missing: ${missing.join(', ')}<br>Found: ${found.join(', ')}`;
+            }
+        }
+        
+        function testAppIntegration() {
+            const result = document.getElementById('appTestResult');
+            
+            // Check if main app scripts loaded
+            const hasStorage = typeof storage !== 'undefined';
+            const hasApp = typeof window.app !== 'undefined';
+            
+            result.className = 'test-result info';
+            result.innerHTML = `
+                Storage available: ${hasStorage ? '✅' : '❌'}<br>
+                App instance: ${hasApp ? '✅' : '❌'}<br>
+                Service Worker: ${navigator.serviceWorker ? '✅' : '❌'}<br>
+                Navigator online: ${navigator.onLine ? '✅' : '❌'}
+            `;
+        }
+    </script>
+    
+    <!-- Load main app scripts for testing -->
+    <script src="storage.js"></script>
+    <script src="app.js"></script>
+    <script src="app-utils.js"></script>
+</body>
+</html>
