@@ -1,7 +1,7 @@
 // Service Worker for Easy Transcribe PWA
-const CACHE_NAME = 'easy-transcribe-pwa-v1';
-const STATIC_CACHE = 'static-cache-v1';
-const DYNAMIC_CACHE = 'dynamic-cache-v1';
+const CACHE_NAME = 'easy-transcribe-pwa-v2';
+const STATIC_CACHE = 'static-cache-v2';
+const DYNAMIC_CACHE = 'dynamic-cache-v2';
 
 // Files to cache for offline functionality
 const STATIC_FILES = [
@@ -13,8 +13,7 @@ const STATIC_FILES = [
     './app-utils.js',
     './ui-enhancements.js',
     './manifest.json',
-    './app-icon.svg',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+    './app-icon.svg'
 ];
 
 // Install event - cache static files
