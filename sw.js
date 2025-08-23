@@ -5,14 +5,16 @@ const DYNAMIC_CACHE = 'dynamic-cache-v1';
 
 // Files to cache for offline functionality
 const STATIC_FILES = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/app.js',
-    '/storage.js',
-    '/manifest.json',
-    '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png',
+    './',
+    './index.html',
+    './styles.css',
+    './app.js',
+    './storage.js',
+    './app-utils.js',
+    './ui-enhancements.js',
+    './manifest.json',
+    './icons/icon-192x192.png',
+    './icons/icon-512x512.png',
     'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
@@ -145,7 +147,7 @@ async function handleStaticRequest(request) {
         
         // Return offline page or fallback
         if (request.destination === 'document') {
-            const cachedIndex = await caches.match('/index.html');
+            const cachedIndex = await caches.match('./index.html');
             if (cachedIndex) {
                 return cachedIndex;
             }
@@ -218,15 +220,15 @@ self.addEventListener('push', (event) => {
         
         const options = {
             body: data.body || 'Your transcription is ready!',
-            icon: '/icons/icon-192x192.png',
-            badge: '/icons/icon-96x96.png',
+            icon: './icons/icon-192x192.png',
+            badge: './icons/icon-96x96.png',
             tag: 'transcription-complete',
             data: data.data || {},
             actions: [
                 {
                     action: 'view',
                     title: 'View Transcription',
-                    icon: '/icons/icon-96x96.png'
+                    icon: './icons/icon-96x96.png'
                 },
                 {
                     action: 'dismiss',
@@ -250,7 +252,7 @@ self.addEventListener('notificationclick', (event) => {
     
     if (event.action === 'view') {
         event.waitUntil(
-            clients.openWindow('/?action=view&id=' + event.notification.data.id)
+            clients.openWindow('./?action=view&id=' + event.notification.data.id)
         );
     } else if (event.action === 'dismiss') {
         // Just close the notification
@@ -258,7 +260,7 @@ self.addEventListener('notificationclick', (event) => {
     } else {
         // Default action - open app
         event.waitUntil(
-            clients.openWindow('/')
+            clients.openWindow('./')
         );
     }
 });
