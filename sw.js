@@ -13,8 +13,7 @@ const STATIC_FILES = [
     './app-utils.js',
     './ui-enhancements.js',
     './manifest.json',
-    './icons/icon-192x192.png',
-    './icons/icon-512x512.png',
+    './app-icon.svg',
     'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
@@ -220,15 +219,15 @@ self.addEventListener('push', (event) => {
         
         const options = {
             body: data.body || 'Your transcription is ready!',
-            icon: './icons/icon-192x192.png',
-            badge: './icons/icon-96x96.png',
+            icon: './app-icon.svg',
+            badge: './app-icon.svg',
             tag: 'transcription-complete',
             data: data.data || {},
             actions: [
                 {
                     action: 'view',
                     title: 'View Transcription',
-                    icon: './icons/icon-96x96.png'
+                    icon: './app-icon.svg'
                 },
                 {
                     action: 'dismiss',

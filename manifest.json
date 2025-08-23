@@ -3,17 +3,17 @@
   "short_name": "EasyTranscribe",
   "description": "AI-powered audio transcription app that works offline",
   "version": "1.0.0",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#2563eb",
   "background_color": "#ffffff",
-  "scope": "/",
+  "scope": "./",
   "lang": "en-US",
   "categories": ["productivity", "utilities", "audio"],
   "icons": [
     {
-      "src": "/app-icon.svg",
+      "src": "./app-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
@@ -37,7 +37,7 @@
       "url": "/?action=transcribe",
       "icons": [
         {
-          "src": "/app-icon.svg",
+          "src": "./app-icon.svg",
           "sizes": "96x96",
           "type": "image/svg+xml"
         }
@@ -50,27 +50,11 @@
       "url": "/?action=history",
       "icons": [
         {
-          "src": "/app-icon.svg",
+          "src": "./app-icon.svg",
           "sizes": "96x96",
           "type": "image/svg+xml"
         }
       ]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshots/mobile-1.png",
-      "sizes": "320x640",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Transcription interface on mobile"
-    },
-    {
-      "src": "screenshots/desktop-1.png",
-      "sizes": "1024x768",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Transcription interface on desktop"
     }
   ],
   "features": [
