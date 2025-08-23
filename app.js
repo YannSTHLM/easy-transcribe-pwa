@@ -57,12 +57,6 @@ class EasyTranscribePWA {
         this.navButtons = document.querySelectorAll('.nav-tab');
         this.views = document.querySelectorAll('.tab-content');
         
-        // Debug: Log element counts and details
-        console.log('Navigation buttons found:', this.navButtons.length);
-        console.log('Views found:', this.views.length);
-        console.log('First nav button:', this.navButtons[0]);
-        console.log('DOM ready state:', document.readyState);
-        
         // Configuration elements
         this.apiKeyInput = document.getElementById('apiKeyInput');
         this.toggleApiKeyBtn = document.getElementById('toggleApiKey');
@@ -87,11 +81,6 @@ class EasyTranscribePWA {
         // Action buttons
         this.transcribeBtn = document.getElementById('transcribeBtn');
         this.validateBtn = document.getElementById('validateBtn');
-        
-        // Debug: Check if key buttons exist
-        console.log('Transcribe button found:', !!this.transcribeBtn);
-        console.log('Validate button found:', !!this.validateBtn);
-        console.log('Upload area found:', !!this.uploadArea);
 
         // Results elements
         this.resultsSection = document.getElementById('resultsSection');
@@ -125,7 +114,6 @@ class EasyTranscribePWA {
         this.navButtons?.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const view = e.target.dataset.tab || e.target.closest('.nav-tab')?.dataset.tab;
-                console.log('Tab clicked:', view);
                 this.switchView(view);
             });
         });
