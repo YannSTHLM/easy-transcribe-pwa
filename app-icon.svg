@@ -1,0 +1,39 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="mic" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="128" fill="url(#bg)"/>
+  
+  <!-- Microphone Body -->
+  <rect x="206" y="140" width="100" height="180" rx="50" fill="url(#mic)" stroke="#1d4ed8" stroke-width="4"/>
+  
+  <!-- Microphone Grille -->
+  <rect x="226" y="180" width="60" height="4" rx="2" fill="#2563eb" opacity="0.7"/>
+  <rect x="226" y="200" width="60" height="4" rx="2" fill="#2563eb" opacity="0.7"/>
+  <rect x="226" y="220" width="60" height="4" rx="2" fill="#2563eb" opacity="0.7"/>
+  <rect x="226" y="240" width="60" height="4" rx="2" fill="#2563eb" opacity="0.7"/>
+  <rect x="226" y="260" width="60" height="4" rx="2" fill="#2563eb" opacity="0.7"/>
+  <rect x="226" y="280" width="60" height="4" rx="2" fill="#2563eb" opacity="0.7"/>
+  
+  <!-- Stand -->
+  <rect x="246" y="320" width="20" height="60" fill="url(#mic)"/>
+  <rect x="206" y="370" width="100" height="20" rx="10" fill="url(#mic)"/>
+  
+  <!-- Sound Waves -->
+  <path d="M 340 180 Q 380 200 380 256 Q 380 312 340 332" stroke="#ffffff" stroke-width="6" fill="none" opacity="0.8"/>
+  <path d="M 360 200 Q 390 215 390 256 Q 390 297 360 312" stroke="#ffffff" stroke-width="4" fill="none" opacity="0.6"/>
+  <path d="M 375 220 Q 395 230 395 256 Q 395 282 375 292" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.4"/>
+  
+  <path d="M 172 180 Q 132 200 132 256 Q 132 312 172 332" stroke="#ffffff" stroke-width="6" fill="none" opacity="0.8"/>
+  <path d="M 152 200 Q 122 215 122 256 Q 122 297 152 312" stroke="#ffffff" stroke-width="4" fill="none" opacity="0.6"/>
+  <path d="M 137 220 Q 117 230 117 256 Q 117 282 137 292" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.4"/>
+</svg>

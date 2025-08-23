@@ -1,0 +1,7 @@
+<!-- This would be a PNG file in production, using SVG for demo -->
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="8" fill="#2563eb"/>
+  <circle cx="16" cy="12" r="3" fill="white"/>
+  <rect x="12" y="16" width="8" height="12" rx="4" fill="white"/>
+  <rect x="14" y="18" width="4" height="8" fill="#2563eb"/>
+</svg>
