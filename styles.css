@@ -803,6 +803,17 @@ section {
     box-shadow: var(--shadow-sm);
 }
 
+.btn-success {
+    background: var(--success) !important;
+    color: white !important;
+    border-color: var(--success) !important;
+}
+
+.btn-success:hover {
+    background: #059669 !important;
+    border-color: #059669 !important;
+}
+
 .api-help {
     font-size: 0.875rem;
     color: var(--gray-600);

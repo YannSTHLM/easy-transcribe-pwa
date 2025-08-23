@@ -263,6 +263,8 @@ class EasyTranscribePWA {
             return;
         }
 
+        let validationSuccessful = false;
+        
         try {
             this.validateBtn.disabled = true;
             this.validateBtn.innerHTML = '<span class="btn-icon">⏳</span>Validating...';
@@ -291,6 +293,12 @@ class EasyTranscribePWA {
                 this.updateTranscribeButtonState();
                 this.updateConnectionStatus('API key validated');
                 
+                // Update validate button to show success state
+                this.validateBtn.innerHTML = '<span class="btn-icon">✅</span>API Key Valid';
+                this.validateBtn.classList.add('btn-success');
+                this.validateBtn.disabled = false;
+                validationSuccessful = true;
+                
             } else {
                 this.showToast('Invalid API key. Please check and try again.', 'error');
                 this.updateConnectionStatus('Invalid API key');
@@ -301,8 +309,11 @@ class EasyTranscribePWA {
             this.showToast('Validation failed. Please check your internet connection.', 'error');
             this.updateConnectionStatus('Validation failed');
         } finally {
-            this.validateBtn.disabled = false;
-            this.validateBtn.innerHTML = '<span class="btn-icon">✓</span>Validate API Key';
+            if (!validationSuccessful) {
+                this.validateBtn.disabled = false;
+                this.validateBtn.innerHTML = '<span class="btn-icon">✓</span>Validate API Key';
+                this.validateBtn.classList.remove('btn-success');
+            }
         }
     }
 
@@ -411,20 +422,26 @@ class EasyTranscribePWA {
     }
 
     setSelectedFile(file) {
+        console.log('setSelectedFile called with:', file);
+        
         if (!this.isValidAudioFile(file)) {
+            console.log('Invalid file type');
             this.showToast('Please select a valid audio file (MP3, WAV, M4A, AAC, OGG, FLAC)', 'error');
             return;
         }
 
         const maxSize = 25 * 1024 * 1024; // 25MB for PWA
         if (file.size > maxSize) {
+            console.log('File too large');
             this.showToast('File size exceeds 25MB limit', 'error');
             return;
         }
 
+        console.log('File accepted, setting as selected file');
         this.selectedFile = file;
         this.displayFileInfo(file);
         this.updateTranscribeButtonState();
+        this.showToast(`File "${file.name}" uploaded successfully!`, 'success');
     }
 
     isValidAudioFile(file) {
