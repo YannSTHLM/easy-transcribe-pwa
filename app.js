@@ -73,6 +73,15 @@ class EasyTranscribePWA {
         this.fileSize = document.getElementById('fileSize');
         this.removeFileBtn = document.getElementById('removeFile');
 
+        // Debug: Check critical file upload elements
+        const criticalElements = ['uploadArea', 'audioFileInput', 'browseBtn'];
+        const missing = criticalElements.filter(id => !document.getElementById(id));
+        if (missing.length > 0) {
+            console.warn('Missing critical elements:', missing);
+        } else {
+            console.log('All critical file upload elements found');
+        }
+
         // Progress elements
         this.progressContainer = document.getElementById('progressContainer');
         this.progressFill = document.getElementById('progressFill');
@@ -130,7 +139,13 @@ class EasyTranscribePWA {
         this.uploadArea?.addEventListener('click', () => this.fileInput?.click());
         this.browseBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.fileInput?.click();
+            console.log('Browse button clicked');
+            if (this.fileInput) {
+                console.log('Triggering file input click');
+                this.fileInput.click();
+            } else {
+                console.error('File input not found!');
+            }
         });
         this.fileInput?.addEventListener('change', (e) => this.handleFileSelect(e));
         this.removeFileBtn?.addEventListener('click', () => this.clearFile());
@@ -365,9 +380,13 @@ class EasyTranscribePWA {
 
     // File handling methods (similar to previous implementation)
     handleFileSelect(event) {
+        console.log('File select event triggered');
         const file = event.target.files[0];
         if (file) {
+            console.log('File selected:', file.name, file.type, file.size);
             this.setSelectedFile(file);
+        } else {
+            console.log('No file selected');
         }
     }
 
