@@ -57,9 +57,11 @@ class EasyTranscribePWA {
         this.navButtons = document.querySelectorAll('.nav-tab');
         this.views = document.querySelectorAll('.tab-content');
         
-        // Debug: Log element counts
+        // Debug: Log element counts and details
         console.log('Navigation buttons found:', this.navButtons.length);
         console.log('Views found:', this.views.length);
+        console.log('First nav button:', this.navButtons[0]);
+        console.log('DOM ready state:', document.readyState);
         
         // Configuration elements
         this.apiKeyInput = document.getElementById('apiKeyInput');
