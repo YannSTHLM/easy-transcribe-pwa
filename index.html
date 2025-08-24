@@ -1,11 +1,159 @@
-<!-- Multiple file upload support for audio files -->
-<input type="file" id="audioFileInput" accept="audio/*" hidden multiple>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Transcribe PWA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Tabs -->
+    <nav>
+        <button class="nav-btn" data-view="transcribe" id="transcribeTabBtn">Transcribe</button>
+        <button class="nav-btn" data-view="history" id="historyTabBtn">History</button>
+        <button class="nav-btn" data-view="settings" id="settingsTabBtn">Settings</button>
+    </nav>
 
-<!-- API Endpoint configuration in Settings section -->
-<div class="setting-item">
-    <div class="setting-info">
-        <div class="setting-name">Groq API Endpoint</div>
-        <div class="setting-desc">Customize API endpoint (default: https://api.groq.com/)</div>
+    <!-- Views -->
+    <div id="transcribeView" class="tab-content active">
+        <h2>Transcribe Audio</h2>
+        <input type="file" id="audioFileInput" accept="audio/*" hidden multiple>
+        <button class="btn" id="browseBtn">Browse...</button>
+        <div id="uploadArea" class="upload-area">Drag & drop files here</div>
+        <div id="fileInfo"></div>
+        <button class="btn" id="transcribeBtn">Transcribe</button>
     </div>
-    <input type="text" id="apiEndpointInput" class="config-input" value="https://api.groq.com/" />
-</div>
+
+    <div id="historyView" class="tab-content" style="display:none;">
+        <h2>Transcription History</h2>
+        <!-- History UI goes here -->
+    </div>
+
+    <div id="settingsView" class="tab-content" style="display:none;">
+        <h2>Settings</h2>
+        <div class="setting-item">
+            <div class="setting-info">
+                <div class="setting-name">Groq API Endpoint</div>
+                <div class="setting-desc">Customize API endpoint (default: https://api.groq.com/)</div>
+            </div>
+            <input type="text" id="apiEndpointInput" class="config-input" value="https://api.groq.com/" />
+        </div>
+        <!-- Optionally, add more settings here -->
+    </div>
+
+    <script>
+    // Tab Navigation Logic
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(view => {
+                view.classList.remove('active');
+                view.style.display = 'none';
+            });
+            // Show selected view
+            const target = btn.getAttribute('data-view');
+            const viewEl = document.getElementById(target + 'View');
+            if (viewEl) {
+                viewEl.classList.add('active');
+                viewEl.style.display = '';
+            }
+        });
+    });
+
+    // Browse button opens file selector
+    document.getElementById('browseBtn').addEventListener('click', () => {
+        document.getElementById('audioFileInput').click();
+    });
+
+    // Drag & Drop Upload Area
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        uploadArea.classList.add('has-files');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('has-files');
+    });
+    uploadArea.addEventListener('drop', (event) => {
+        event.preventDefault();
+        uploadArea.classList.remove('has-files');
+        const files = Array.from(event.dataTransfer.files);
+        setSelectedFiles(files);
+    });
+
+    // File Input Selection
+    document.getElementById('audioFileInput').addEventListener('change', (event) => {
+        const files = Array.from(event.target.files);
+        setSelectedFiles(files);
+    });
+
+    // Handle selected files
+    let selectedFiles = [];
+    function setSelectedFiles(files) {
+        const validFiles = files.filter(f => f.type.startsWith('audio/') && f.size <= 25 * 1024 * 1024);
+        selectedFiles = validFiles;
+        displayFileInfo(validFiles);
+    }
+
+    function formatFileSize(size) {
+        const units = ['B', 'KB', 'MB', 'GB'];
+        let i = 0;
+        while (size >= 1024 && i < units.length - 1) {
+            size /= 1024;
+            i++;
+        }
+        return `${size.toFixed(2)} ${units[i]}`;
+    }
+
+    function displayFileInfo(files) {
+        const fileInfo = document.getElementById('fileInfo');
+        if (!fileInfo) return;
+        if (files.length === 0) {
+            fileInfo.innerHTML = '';
+            uploadArea.style.display = '';
+            return;
+        } else {
+            uploadArea.style.display = 'none';
+        }
+        fileInfo.innerHTML = files.map(file =>
+            `<div class="file-meta">
+                <span class="file-name">${file.name}</span>
+                <span class="file-size">${formatFileSize(file.size)}</span>
+                <button class="file-remove" data-file="${file.name}">&times;</button>
+            </div>`
+        ).join('');
+        // Remove file buttons
+        fileInfo.querySelectorAll('.file-remove').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.getAttribute('data-file');
+                selectedFiles = selectedFiles.filter(f => f.name !== name);
+                displayFileInfo(selectedFiles);
+            });
+        });
+    }
+
+    // Transcribe Button Handler (Stub)
+    document.getElementById('transcribeBtn').addEventListener('click', async () => {
+        if (selectedFiles.length === 0) {
+            alert('Please select audio files first!');
+            return;
+        }
+        // TODO: implement actual transcription logic
+        alert(`Ready to transcribe ${selectedFiles.length} file(s)!`);
+    });
+
+    // API Endpoint config persistence (Stub)
+    const apiEndpointInput = document.getElementById('apiEndpointInput');
+    apiEndpointInput.addEventListener('input', () => {
+        // TODO: save to localStorage or IndexedDB
+        localStorage.setItem('api_endpoint', apiEndpointInput.value);
+    });
+    // On load, restore saved endpoint
+    window.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem('api_endpoint');
+        if (saved) apiEndpointInput.value = saved;
+    });
+
+    </script>
+</body>
+</html>
