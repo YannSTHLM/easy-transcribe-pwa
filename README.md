@@ -289,7 +289,6 @@ MIT License - feel free to use in your own projects!
 ## 🔗 Links
 
 - **GitHub Repository**: https://github.com/YannSTHLM/easy-transcribe-pwa
-- **Demo PWA**: https://3001-iup0c9kfew126qirisan7-6532622b.e2b.dev/ *(temporary demo)*
 - **Groq Console**: https://console.groq.com/
 - **PWA Documentation**: https://web.dev/progressive-web-apps/
 
