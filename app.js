@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let mediaRecorder;
     let audioChunks = [];
     let recognition;
-
+    let finalTranscription = ''; // Accumulated final transcription
+    
     // Initialize speech recognition
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -14,13 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition.interimResults = true;
         
         recognition.onresult = (event) => {
-            let finalTranscript = '';
+            let interimTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; i++) {
                 if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript + '\n';
+                    finalTranscription += event.results[i][0].transcript + '\n';
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
                 }
             }
-            transcriptArea.value += finalTranscript;
+            // Update the textarea with both interim and final
+            transcriptArea.value = finalTranscription + interimTranscript;
         };
     }
 
@@ -38,7 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 audioChunks = [];
                 
                 if (recognition) {
-                    recognition.start();
+                    recognition.stop();
+                }
+                
+                // Check if there's a Groq API key and send the transcription
+                const groqApiKey = localStorage.getItem('groqApiKey');
+                if (groqApiKey) {
+                    // Show loading indicator
+                    transcriptArea.value += "\n\nProcessing with Groq...\n";
+                    
+                    // Send to Groq
+                    sendToGroq(finalTranscription, groqApiKey);
                 }
             };
             
@@ -56,10 +70,43 @@ document.addEventListener('DOMContentLoaded', () => {
             mediaRecorder.stop();
             recordBtn.disabled = false;
             stopBtn.disabled = true;
-            
-            if (recognition) {
-                recognition.stop();
-            }
         }
     });
+    
+    // Function to send transcription to Groq
+    async function sendToGroq(transcription, apiKey) {
+        try {
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "mixtral-8x7b-32768",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a helpful assistant that refines and corrects transcriptions. Output only the refined transcription without any extra commentary."
+                        },
+                        {
+                            role: "user",
+                            content: `Refine this transcription: ${transcription}`
+                        }
+                    ]
+                })
+            });
+            
+            const data = await response.json();
+            if (data.choices && data.choices[0] && data.choices[0].message) {
+                const groqResponse = data.choices[0].message.content;
+                transcriptArea.value += `\n\n--- Groq Enhanced ---\n${groqResponse}`;
+            } else {
+                throw new Error('Invalid response from Groq');
+            }
+        } catch (error) {
+            console.error('Groq API error:', error);
+            transcriptArea.value += `\n\n--- Groq Error ---\nFailed to process with Groq: ${error.message}`;
+        }
+    }
 });
